@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import MarkdownIt from 'markdown-it';
-import MdEditor from 'react-markdown-editor-lite';
-import 'react-markdown-editor-lite/lib/index.css';
+import MDEditor from '@uiw/react-md-editor';
 
 function App() {
   const [editorData, setEditorData] = useState(() => {
-    
     return JSON.parse(localStorage.getItem('notes')) || [];
   });
 
   const [currentNote, setCurrentNote] = useState({ title: '', content: '' });
-  const mdParser = new MarkdownIt();
 
- 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(editorData));
   }, [editorData]);
@@ -92,12 +87,13 @@ function App() {
             borderRadius: '5px',
           }}
         />
-        <MdEditor
-          style={{ height: '400px' }}
-          value={currentNote.content}
-          onChange={(data) => setCurrentNote({ ...currentNote, content: data.text })}
-          renderHTML={(text) => mdParser.render(text)}
-        />
+        <div data-color-mode="light">
+          <MDEditor
+            height={400}
+            value={currentNote.content}
+            onChange={(value) => setCurrentNote({ ...currentNote, content: value || '' })}
+          />
+        </div>
         <button
           onClick={addNote}
           style={{
